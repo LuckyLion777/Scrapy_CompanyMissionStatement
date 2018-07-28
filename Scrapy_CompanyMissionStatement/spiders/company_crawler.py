@@ -16,40 +16,40 @@ class CompanyCrawler(scrapy.Spider):
         company_list = []
         link_list = []
 
-        reader = csv.reader(open('company_link_list.csv', newline=''), delimiter='\t', quotechar='|')
-        is_first = True
-        for row in reader:
-            if not is_first:
-                company_list.append(row[0].split(',')[0])
-                link_list.append(row[0].split(',')[1])
-            is_first = False
+        # reader = csv.reader(open('company_link_list.csv', newline=''), delimiter='\t', quotechar='|')
+        # is_first = True
+        # for row in reader:
+        #     if not is_first:
+        #         company_list.append(row[0].split(',')[0])
+        #         link_list.append(row[0].split(',')[1])
+        #     is_first = False
+        #
+        # for i in range(len(company_list)):
+        #     item = CompanymissionstatementItem()
+        #     self.phrase_list = [p for p in list(item.fields.keys()) if p not in {'company', 'link', 'foundation'}]
+        #     for p in self.phrase_list:
+        #         item[p] = 0
+        #     item['company'] = company_list[i].strip()
+        #     item['link'] = link_list[i].strip()
+        #     if 'http' in item['link'] and 'www..com/' not in item['link']:
+        #         yield scrapy.Request(
+        #             url=item['link'],
+        #             callback=self.parse_page,
+        #             meta={'item': item},
+        #             dont_filter=True
+        #         )
 
-        for i in range(len(company_list)):
-            item = CompanymissionstatementItem()
-            self.phrase_list = [p for p in list(item.fields.keys()) if p not in {'company', 'link', 'foundation'}]
-            for p in self.phrase_list:
-                item[p] = 0
-            item['company'] = company_list[i].strip()
-            item['link'] = link_list[i].strip()
-            if 'http' in item['link'] and 'www..com/' not in item['link']:
-                yield scrapy.Request(
-                    url=item['link'],
-                    callback=self.parse_page,
-                    meta={'item': item},
-                    dont_filter=True
-                )
-
-        # item = CompanymissionstatementItem()
-        # self.phrase_list = [p for p in list(item.fields.keys()) if p not in {'company', 'link', 'foundation'}]
-        # for p in self.phrase_list:
-        #     item[p] = 0
-        # # item['company'] = company_list[i]
-        # # item['link'] = link_list[i]
-        # yield scrapy.Request(
-        #     url='https://www.morganstanley.com/',
-        #     callback=self.parse_page,
-        #     meta={'item': item},
-        # )
+        item = CompanymissionstatementItem()
+        self.phrase_list = [p for p in list(item.fields.keys()) if p not in {'company', 'link', 'foundation'}]
+        for p in self.phrase_list:
+            item[p] = 0
+        # item['company'] = company_list[i]
+        # item['link'] = link_list[i]
+        yield scrapy.Request(
+            url='https://www.morganstanley.com/',
+            callback=self.parse_page,
+            meta={'item': item},
+        )
 
     def parse_page(self, response):
         item = response.meta.get('item')
@@ -71,16 +71,16 @@ class CompanyCrawler(scrapy.Spider):
                     continue
                 link = urljoin(response.url, href)
 
-                with urllib.request.urlopen(link) as temp_response:
-                    if response.url in temp_response:
-                        try:
-                            content = requests.get(link).text.lower()
-                            item = get_phrase_matches(self.phrase_list, content, self.content_list, item)
-                            self.content_list.append(content)
-                            if 'foundation' in content:
-                                item['foundation'] = 'Yes'
-                        except:
-                            print('invalid url')
+                # with urllib.request.urlopen(link) as temp_response:
+                #     if response.url in temp_response:
+                try:
+                    content = requests.get(link).text.lower()
+                    item = get_phrase_matches(self.phrase_list, content, self.content_list, item)
+                    self.content_list.append(content)
+                    if 'foundation' in content:
+                        item['foundation'] = 'Yes'
+                except:
+                    print('invalid url')
 
         yield item
 
