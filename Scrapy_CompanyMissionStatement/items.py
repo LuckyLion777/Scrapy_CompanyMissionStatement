@@ -4,10 +4,7 @@ import scrapy
 class CompanymissionstatementItem(scrapy.Item):
     company = scrapy.Field()
     link = scrapy.Field()
-    # phrase = scrapy.Field()
-    # number_of_matches = scrapy.Field()
-    # mission = scrapy.Field()
-    Foundation = scrapy.Field()
+    foundation = scrapy.Field()
     community_investment = scrapy.Field()
     community_focus = scrapy.Field()
     community_contribution = scrapy.Field()
