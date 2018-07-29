@@ -46,7 +46,7 @@ class CompanyCrawler(scrapy.Spider):
         # # item['company'] = company_list[i]
         # # item['link'] = link_list[i]
         # yield scrapy.Request(
-        #     url='https://www.morganstanley.com/',
+        #     url='https://www.citadel.com/',
         #     callback=self.parse_page,
         #     meta={'item': item},
         # )
@@ -65,7 +65,7 @@ class CompanyCrawler(scrapy.Spider):
         if len(about_link) > 0:
             href_list.insert(0, about_link[0])
         if len(href_list) > 1:
-            for href in href_list[:30]:
+            for href in href_list[:10]:
                 if 'mailto:' in href:
                     continue
                 link = urljoin(response.url, href)
