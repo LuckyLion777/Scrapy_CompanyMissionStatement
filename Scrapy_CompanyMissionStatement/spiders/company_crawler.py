@@ -63,24 +63,19 @@ class CompanyCrawler(scrapy.Spider):
         href_list = list(set(response.xpath('*//a/@href').extract()))
         if len(href_list) > 1:
             for href in href_list:
-                # if '.com' in href and response.url not in href:
-                #     continue
-                # elif href == '/' or '#' or '/' not in href:
-                #     continue
                 if 'mailto:' in href:
                     continue
                 link = urljoin(response.url, href)
-
                 # with urllib.request.urlopen(link) as temp_response:
                 #     if response.url in temp_response:
                 try:
-                    content = requests.get(link).text.lower()
+                    content = requests.get(link, timeout=5).text.lower()
                     item = get_phrase_matches(self.phrase_list, content, self.content_list, item)
                     self.content_list.append(content)
                     if 'foundation' in content:
                         item['foundation'] = 'Yes'
-                except:
-                    print('invalid url')
+                except requests.exceptions.RequestException as e:
+                    print(e)
 
         yield item
 
