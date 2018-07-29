@@ -63,7 +63,7 @@ class CompanyCrawler(scrapy.Spider):
         href_list = list(set(response.xpath('*//a/@href').extract()))
         about_link = response.xpath('//a[contains(text(), "About")]/@href').extract()
         if len(about_link) > 0:
-            href_list.insert(0, about_link)
+            href_list.insert(0, about_link[0])
         if len(href_list) > 1:
             for href in href_list[:30]:
                 if 'mailto:' in href:
