@@ -11,6 +11,10 @@ class CompanyCrawler(scrapy.Spider):
     name = 'company_crawler'
     phrase_list = []
     content_list = []
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/67.0.3396.99 Safari/537.36',
+    }
 
     def start_requests(self):
         company_list = []
@@ -36,6 +40,7 @@ class CompanyCrawler(scrapy.Spider):
                     url=item['link'],
                     callback=self.parse_page,
                     meta={'item': item},
+                    headers=self.headers,
                     dont_filter=True
                 )
 
@@ -46,9 +51,10 @@ class CompanyCrawler(scrapy.Spider):
         # # item['company'] = company_list[i]
         # # item['link'] = link_list[i]
         # yield scrapy.Request(
-        #     url='https://www.citadel.com/',
+        #     url='https://www.unionbank.com/',
         #     callback=self.parse_page,
         #     meta={'item': item},
+        #     headers=self.headers,
         # )
 
     def parse_page(self, response):
