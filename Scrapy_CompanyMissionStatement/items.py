@@ -27,7 +27,7 @@ class CompanymissionstatementItem(scrapy.Item):
     local_partnerships = scrapy.Field()
     promotion_of_volunteerism = scrapy.Field()
     underserved_communities = scrapy.Field()
-    education_progrmas = scrapy.Field()
+    education_programs = scrapy.Field()
     community_programs = scrapy.Field()
     community_financial_programs = scrapy.Field()
     local_branch_programs = scrapy.Field()
