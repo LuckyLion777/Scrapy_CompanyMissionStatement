@@ -5,6 +5,7 @@ NEWSPIDER_MODULE = 'Scrapy_CompanyMissionStatement.spiders'
 
 ROBOTSTXT_OBEY = False
 
-DOWNLOAD_DELAY = 0.25
+CONCURRENT_REQUESTS = 10
+DOWNLOAD_DELAY = 4
 
 ITEM_PIPELINES = {'Scrapy_CompanyMissionStatement.pipelines.CSVPipeline': 300 }
