@@ -32,10 +32,11 @@ class CompanyCrawler(scrapy.Spider):
                 headers=self.headers,
                 meta={'item': item},
             )
+
         # item = CompanyItem()
         # item['company_name'] = 'BBVA Compass'
         # yield scrapy.Request(
-        #     url=self.search_url.format('BBVA Compass Bank'),
+        #     url=self.search_url.format('TPG Global Private Equity Firm'),
         #     callback=self.parse,
         #     headers=self.headers,
         #     meta={'item': item},
@@ -43,7 +44,7 @@ class CompanyCrawler(scrapy.Spider):
 
     def parse(self, response):
         item = response.meta.get('item')
-        domain = response.xpath('//cite')[0].xpath('./text()').extract()
+        domain = response.xpath('//cite')[0].xpath('.//text()').extract()
         if domain:
             domain = ''.join(domain)
             if 'http' not in domain:
