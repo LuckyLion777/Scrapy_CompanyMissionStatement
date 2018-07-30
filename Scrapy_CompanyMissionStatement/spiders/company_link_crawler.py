@@ -27,7 +27,7 @@ class CompanyCrawler(scrapy.Spider):
             item = CompanyItem()
             item['company_name'] = company_list[i]
             yield scrapy.Request(
-                url=self.search_url.format(word),
+                url=self.search_url.format(word).replace('&', '%26'),
                 callback=self.parse,
                 headers=self.headers,
                 meta={'item': item},
@@ -36,7 +36,7 @@ class CompanyCrawler(scrapy.Spider):
         # item = CompanyItem()
         # item['company_name'] = 'BBVA Compass'
         # yield scrapy.Request(
-        #     url=self.search_url.format('TPG Global Private Equity Firm'),
+        #     url=self.search_url.format('F&M Bank Iowa').replace('&', '%26'),
         #     callback=self.parse,
         #     headers=self.headers,
         #     meta={'item': item},
@@ -49,8 +49,12 @@ class CompanyCrawler(scrapy.Spider):
             domain = ''.join(domain)
             if 'http' not in domain:
                 domain = 'http://' + domain
+            if '›' in domain:
+                domain = domain.split('›')[0].strip()
             parsed_uri = urlparse(domain)
             item['company_link'] = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)
+            if '..' in item['company_link']:
+                print('error')
         else:
             item['company_link'] = None
         yield item
