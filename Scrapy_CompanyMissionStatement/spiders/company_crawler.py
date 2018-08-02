@@ -2,6 +2,7 @@ import scrapy
 import csv
 import re
 import requests
+import pandas
 from urllib.parse import urljoin
 import urllib.request
 from Scrapy_CompanyMissionStatement.items import CompanymissionstatementItem
@@ -17,16 +18,12 @@ class CompanyCrawler(scrapy.Spider):
     }
 
     def start_requests(self):
-        company_list = []
-        link_list = []
-
-        reader = csv.reader(open('company_link_list.csv', newline=''), delimiter='\t', quotechar='|')
-        is_first = True
-        for row in reader:
-            if not is_first:
-                company_list.append(row[0].split(',')[0])
-                link_list.append(row[0].split(',')[1])
-            is_first = False
+        col_names = ['company_name', 'company_link']
+        data = pandas.read_csv('company_link_list.csv', names=col_names)
+        company_list = data.company_name.tolist()
+        link_list = data.company_link.tolist()
+        company_list.pop(0)
+        link_list.pop(0)
 
         for i in range(len(company_list)):
             item = CompanymissionstatementItem()
@@ -40,7 +37,8 @@ class CompanyCrawler(scrapy.Spider):
                     url=item['link'],
                     callback=self.parse_page,
                     meta={'item': item},
-                    headers=self.headers
+                    headers=self.headers,
+                    dont_filter=True
                 )
 
         # item = CompanymissionstatementItem()
@@ -74,8 +72,6 @@ class CompanyCrawler(scrapy.Spider):
                 if 'mailto:' in href:
                     continue
                 link = urljoin(response.url, href)
-                # with urllib.request.urlopen(link) as temp_response:
-                #     if response.url in temp_response:
                 if response.url in link:
                     try:
                         content = requests.get(link, timeout=5).text.lower()
