@@ -40,8 +40,7 @@ class CompanyCrawler(scrapy.Spider):
                     url=item['link'],
                     callback=self.parse_page,
                     meta={'item': item},
-                    headers=self.headers,
-                    dont_filter=True
+                    headers=self.headers
                 )
 
         # item = CompanymissionstatementItem()
