@@ -17,7 +17,7 @@ class CompanyCrawler(scrapy.Spider):
         company_list = []
         type_list = []
         # file = xlrd.open_workbook("Current Customers for FinEd.xlsx")
-        file = xlrd.open_workbook("FinEd_Prospects.xlsx")
+        file = xlrd.open_workbook("FinEd prospects_2_ST (1).xlsx")
         sheet = file.sheet_by_index(0)
         for k in range(1, sheet.nrows):
             company_list.append(str(sheet.row_values(k)[1]))
