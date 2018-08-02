@@ -12,4 +12,8 @@ DOWNLOAD_TIMEOUT = 4
 MEDIA_ALLOW_REDIRECTS = True
 HTTPERROR_ALLOW_ALL = True
 
-ITEM_PIPELINES = {'Scrapy_CompanyMissionStatement.pipelines.CSVPipeline': 300 }
+ITEM_PIPELINES = {'Scrapy_CompanyMissionStatement.pipelines.CSVPipeline': 301}
+
+DOWNLOADER_MIDDLEWARES = {'scrapy_crawlera.CrawleraMiddleware': 300}
+CRAWLERA_ENABLED = True
+CRAWLERA_APIKEY = '*** API_KEY HERE ***'

@@ -1,0 +1,6 @@
+Scrapy==1.5.0
+Pillow==5.2.0
+scrapy-crawlera==1.3.0
+requests==2.19.1
+xlrd==1.1.0
+pandas==0.23.3

@@ -16,18 +16,14 @@ class CompanyCrawler(scrapy.Spider):
     def start_requests(self):
         company_list = []
         type_list = []
-        # file = xlrd.open_workbook("Current Customers for FinEd.xlsx")
-        file = xlrd.open_workbook("FinEd prospects_2_ST (1).xlsx")
+        file = xlrd.open_workbook("FinEd_Prospects.xlsx")
         sheet = file.sheet_by_index(0)
-        # for k in range(1, sheet.nrows):
-        #     company_list.append(str(sheet.row_values(k)[1]))
-        #     type_list.append(str(sheet.row_values(k)[2]))
         for k in range(1, sheet.nrows):
-            company_list.append(str(sheet.row_values(k)[0]))
+            company_list.append(str(sheet.row_values(k)[1]))
+            type_list.append(str(sheet.row_values(k)[2]))
 
         for i in range(len(company_list)):
-            # word = company_list[i] + ' ' + type_list[i]
-            word = company_list[i]
+            word = company_list[i] + ' ' + type_list[i]
             item = CompanyItem()
             item['company_name'] = company_list[i]
             yield scrapy.Request(
@@ -36,15 +32,6 @@ class CompanyCrawler(scrapy.Spider):
                 headers=self.headers,
                 meta={'item': item},
             )
-
-        # item = CompanyItem()
-        # item['company_name'] = 'BBVA Compass'
-        # yield scrapy.Request(
-        #     url=self.search_url.format('F&M Bank Iowa').replace('&', '%26'),
-        #     callback=self.parse,
-        #     headers=self.headers,
-        #     meta={'item': item},
-        # )
 
     def parse(self, response):
         item = response.meta.get('item')

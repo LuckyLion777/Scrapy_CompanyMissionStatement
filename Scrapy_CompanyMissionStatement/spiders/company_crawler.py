@@ -1,10 +1,8 @@
 import scrapy
-import csv
 import re
 import requests
 import pandas
 from urllib.parse import urljoin
-import urllib.request
 from Scrapy_CompanyMissionStatement.items import CompanymissionstatementItem
 
 
@@ -40,19 +38,6 @@ class CompanyCrawler(scrapy.Spider):
                     headers=self.headers,
                     dont_filter=True
                 )
-
-        # item = CompanymissionstatementItem()
-        # self.phrase_list = [p for p in list(item.fields.keys()) if p not in {'company', 'link', 'foundation'}]
-        # for p in self.phrase_list:
-        #     item[p] = 0
-        # # item['company'] = company_list[i]
-        # # item['link'] = link_list[i]
-        # yield scrapy.Request(
-        #     url='https://www.unionbank.com/',
-        #     callback=self.parse_page,
-        #     meta={'item': item},
-        #     headers=self.headers,
-        # )
 
     def parse_page(self, response):
         item = response.meta.get('item')
@@ -91,6 +76,4 @@ def get_phrase_matches(phrase_list, content, content_list, item):
     for phrase in phrase_list:
         keyword = phrase.replace('_', ' ')
         item[phrase] += len(re.findall(keyword, content))
-        if len(re.findall(keyword, content)) > 0:
-            print(5)
     return item
